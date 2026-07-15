@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "version": 1,
+    "description": "LOADCAST 코어 로직 공유 테스트 벡터. iOS/Android 테스트가 모두 이 파일을 읽는다. docs/SPEC.md 참조."
+  },
+  "loadCases": [
+    { "name": "60min HIGH = 180", "durationMin": 60, "intensity": "HIGH", "expectedLoad": 180 },
+    { "name": "55min MODERATE = 110", "durationMin": 55, "intensity": "MODERATE", "expectedLoad": 110 },
+    { "name": "35min LOW = 35", "durationMin": 35, "intensity": "LOW", "expectedLoad": 35 },
+    { "name": "40min LOW = 40", "durationMin": 40, "intensity": "LOW", "expectedLoad": 40 },
+    { "name": "50min HIGH = 150", "durationMin": 50, "intensity": "HIGH", "expectedLoad": 150 }
+  ],
+  "acwrCases": [
+    { "name": "design scenario ratio", "acuteLoad": 475, "chronicLoad": 1465, "expectedAcwr": 1.2969283276450512, "expectedStatus": "OPTIMAL" },
+    { "name": "boundary 0.8 is OPTIMAL", "acuteLoad": 200, "chronicLoad": 1000, "expectedAcwr": 0.8, "expectedStatus": "OPTIMAL" },
+    { "name": "below 0.8 is LOW", "acuteLoad": 199, "chronicLoad": 1000, "expectedAcwr": 0.796, "expectedStatus": "LOW" },
+    { "name": "boundary 1.3 is OPTIMAL", "acuteLoad": 325, "chronicLoad": 1000, "expectedAcwr": 1.3, "expectedStatus": "OPTIMAL" },
+    { "name": "just above 1.3 is CAUTION", "acuteLoad": 326, "chronicLoad": 1000, "expectedAcwr": 1.304, "expectedStatus": "CAUTION" },
+    { "name": "boundary 1.5 is CAUTION", "acuteLoad": 375, "chronicLoad": 1000, "expectedAcwr": 1.5, "expectedStatus": "CAUTION" },
+    { "name": "above 1.5 is OVERLOAD", "acuteLoad": 380, "chronicLoad": 1000, "expectedAcwr": 1.52, "expectedStatus": "OVERLOAD" },
+    { "name": "chronic 0 is UNKNOWN", "acuteLoad": 100, "chronicLoad": 0, "expectedAcwr": null, "expectedStatus": "UNKNOWN" }
+  ],
+  "weeklySummaryCases": [
+    {
+      "name": "design home scenario: 200min / 475pts / 2 high / 2 rest",
+      "today": "2026-07-15",
+      "records": [
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 35, "intensity": "LOW" },
+        { "date": "2026-07-11", "type": "WEIGHT", "durationMin": 55, "intensity": "MODERATE" },
+        { "date": "2026-07-09", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-07-08", "type": "YOGA", "durationMin": 40, "intensity": "LOW" }
+      ],
+      "expected": { "totalMinutes": 200, "totalLoad": 475, "highCount": 2, "restDays": 2 }
+    }
+  ],
+  "fatigueCases": [
+    {
+      "name": "single crossfit yesterday: lower/upper/cardio MODERATE, core LOW",
+      "today": "2026-07-15",
+      "records": [
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 35, "intensity": "LOW" }
+      ],
+      "expected": { "LOWER": "MODERATE", "UPPER": "MODERATE", "CORE": "LOW", "CARDIO": "MODERATE" }
+    },
+    {
+      "name": "dense 3 days: lower/upper/cardio HIGH, core MODERATE",
+      "today": "2026-07-15",
+      "records": [
+        { "date": "2026-07-15", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-13", "type": "RUNNING", "durationMin": 60, "intensity": "MODERATE" }
+      ],
+      "expected": { "LOWER": "HIGH", "UPPER": "HIGH", "CORE": "MODERATE", "CARDIO": "HIGH" }
+    }
+  ],
+  "recommendationCases": [
+    {
+      "name": "insufficient data with 2 records",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-07-10",
+      "records": [
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 35, "intensity": "LOW" }
+      ],
+      "expected": { "kind": "INSUFFICIENT_DATA", "recordedCount": 2, "requiredCount": 3 }
+    },
+    {
+      "name": "design home scenario: MODERATE via yesterday-high + frequent-high",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-05-01",
+      "records": [
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 35, "intensity": "LOW" },
+        { "date": "2026-07-11", "type": "WEIGHT", "durationMin": 55, "intensity": "MODERATE" },
+        { "date": "2026-07-09", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-07-08", "type": "YOGA", "durationMin": 40, "intensity": "LOW" },
+        { "date": "2026-07-07", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-05", "type": "RUNNING", "durationMin": 40, "intensity": "MODERATE" },
+        { "date": "2026-07-03", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-07-01", "type": "CROSSFIT", "durationMin": 55, "intensity": "HIGH" },
+        { "date": "2026-06-28", "type": "RUNNING", "durationMin": 45, "intensity": "LOW" },
+        { "date": "2026-06-26", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-06-24", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-06-21", "type": "RUNNING", "durationMin": 40, "intensity": "MODERATE" },
+        { "date": "2026-06-19", "type": "YOGA", "durationMin": 30, "intensity": "LOW" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "MODERATE",
+        "estimate": false,
+        "reasonCodes": ["YESTERDAY_HIGH", "FREQUENT_HIGH"],
+        "acwr": 1.2969283276450512,
+        "loadStatus": "OPTIMAL"
+      }
+    },
+    {
+      "name": "RECOVERY via ACWR > 1.5",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-05-01",
+      "records": [
+        { "date": "2026-07-15", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-14", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-07-12", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-07-10", "type": "RUNNING", "durationMin": 40, "intensity": "MODERATE" },
+        { "date": "2026-06-30", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-06-25", "type": "RUNNING", "durationMin": 45, "intensity": "MODERATE" },
+        { "date": "2026-06-20", "type": "WEIGHT", "durationMin": 55, "intensity": "MODERATE" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "RECOVERY",
+        "estimate": false,
+        "reasonCodes": ["ACWR_HIGH"],
+        "acwr": 2.5542168674698793,
+        "loadStatus": "OVERLOAD"
+      }
+    },
+    {
+      "name": "RECOVERY via consecutive high, estimate mode (14 days since first use)",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-07-01",
+      "records": [
+        { "date": "2026-07-14", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-13", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-07-11", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-08", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "RECOVERY",
+        "estimate": true,
+        "reasonCodes": ["CONSECUTIVE_HIGH"],
+        "acwr": null,
+        "loadStatus": "UNKNOWN"
+      }
+    },
+    {
+      "name": "RECOVERY via no rest days, estimate mode (7 days since first use)",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-07-09",
+      "records": [
+        { "date": "2026-07-09", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-10", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-11", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-13", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-14", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "RECOVERY",
+        "estimate": true,
+        "reasonCodes": ["NO_REST"],
+        "acwr": null,
+        "loadStatus": "UNKNOWN"
+      }
+    },
+    {
+      "name": "MODERATE via ACWR in (1.3, 1.5]",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-05-01",
+      "records": [
+        { "date": "2026-07-15", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-07-13", "type": "RUNNING", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-07-11", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-07-05", "type": "RUNNING", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-07-01", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-06-27", "type": "RUNNING", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-06-25", "type": "CROSSFIT", "durationMin": 40, "intensity": "HIGH" },
+        { "date": "2026-06-22", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-06-19", "type": "RUNNING", "durationMin": 60, "intensity": "MODERATE" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "MODERATE",
+        "estimate": false,
+        "reasonCodes": ["ACWR_ELEVATED"],
+        "acwr": 1.44,
+        "loadStatus": "CAUTION"
+      }
+    },
+    {
+      "name": "HIGH_OK balanced week",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-05-01",
+      "records": [
+        { "date": "2026-07-13", "type": "WEIGHT", "durationMin": 50, "intensity": "MODERATE" },
+        { "date": "2026-07-10", "type": "RUNNING", "durationMin": 40, "intensity": "LOW" },
+        { "date": "2026-07-06", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-07-02", "type": "WEIGHT", "durationMin": 55, "intensity": "MODERATE" },
+        { "date": "2026-06-27", "type": "RUNNING", "durationMin": 35, "intensity": "LOW" },
+        { "date": "2026-06-22", "type": "CROSSFIT", "durationMin": 40, "intensity": "HIGH" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "HIGH_OK",
+        "estimate": false,
+        "reasonCodes": [],
+        "acwr": 1.009009009009009,
+        "loadStatus": "OPTIMAL"
+      }
+    },
+    {
+      "name": "HIGH_OK with low ACWR room to grow",
+      "today": "2026-07-15",
+      "firstUseDate": "2026-04-01",
+      "records": [
+        { "date": "2026-07-12", "type": "RUNNING", "durationMin": 30, "intensity": "LOW" },
+        { "date": "2026-07-05", "type": "CROSSFIT", "durationMin": 60, "intensity": "HIGH" },
+        { "date": "2026-07-01", "type": "CROSSFIT", "durationMin": 50, "intensity": "HIGH" },
+        { "date": "2026-06-28", "type": "WEIGHT", "durationMin": 60, "intensity": "MODERATE" },
+        { "date": "2026-06-24", "type": "CROSSFIT", "durationMin": 55, "intensity": "HIGH" },
+        { "date": "2026-06-20", "type": "RUNNING", "durationMin": 45, "intensity": "MODERATE" }
+      ],
+      "expected": {
+        "kind": "RECOMMENDATION",
+        "state": "HIGH_OK",
+        "estimate": false,
+        "reasonCodes": ["ACWR_LOW_ROOM"],
+        "acwr": 0.16326530612244897,
+        "loadStatus": "LOW"
+      }
+    }
+  ]
+}

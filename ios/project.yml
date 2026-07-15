@@ -1,0 +1,30 @@
+# XcodeGen 프로젝트 정의 — `brew install xcodegen && xcodegen generate` 후 Loadcast.xcodeproj 오픈
+name: Loadcast
+options:
+  bundleIdPrefix: com.loadcast
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+packages:
+  LoadcastCore:
+    path: LoadcastCore
+
+targets:
+  Loadcast:
+    type: application
+    platform: iOS
+    sources:
+      - Loadcast
+    dependencies:
+      - package: LoadcastCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.loadcast.app
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: LOADCAST
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: 5.9

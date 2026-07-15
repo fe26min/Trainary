@@ -1,0 +1,32 @@
+# Gradle / Android
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Xcode / Swift
+ios/**/xcuserdata/
+ios/**/*.xcodeproj
+!ios/**/project.yml
+.build/
+DerivedData/
+*.xcworkspace
+
+# OS
+.DS_Store
+
+# Secrets
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+.env
