@@ -35,9 +35,13 @@
 
 ```bash
 cd android
-./gradlew :core:test        # 계산 로직 테스트 (JDK 17+만 있으면 어디서든 실행 가능)
+gradle wrapper --gradle-version 8.14.3   # 최초 1회: 래퍼 생성 (Gradle 8.x 설치 필요)
+./gradlew :core:test          # 계산 로직 테스트 (JDK 17+만 있으면 어디서든 실행 가능)
 ./gradlew :app:assembleDebug  # 앱 빌드 (Android SDK 필요 — Android Studio 권장)
 ```
+
+> 래퍼 바이너리(gradle-wrapper.jar)는 저장소에 포함하지 않았습니다. Android Studio로 열면
+> 자동으로 처리되고, CLI에서는 위 `gradle wrapper` 한 번이면 됩니다.
 
 `app` 모듈은 Android SDK가 감지될 때만(`ANDROID_HOME` 또는 `android/local.properties`) 빌드에 포함됩니다.
 따라서 SDK 없는 CI/환경에서도 `:core:test`는 항상 돌릴 수 있습니다.
