@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -74,7 +76,7 @@ fun IntensityBadge(intensity: Intensity, modifier: Modifier = Modifier) {
     )
 }
 
-/** 각진 모서리 흰색 카드 (Industry 디자인 시스템 — radius 0). */
+/** 각진 모서리 흰색 카드 (Industry 디자인 시스템 — radius 0). 선택적 상단 액센트 스트립. */
 @Composable
 fun SquareCard(
     modifier: Modifier = Modifier,
@@ -85,21 +87,17 @@ fun SquareCard(
         modifier = modifier
             .fillMaxWidth()
             .background(LoadcastColors.Surface)
-            .border(1.dp, LoadcastColors.Divider)
-            .then(
-                if (topAccent != null) {
-                    Modifier
-                        .background(topAccent)
-                        .padding(top = 4.dp)
-                        .background(LoadcastColors.Surface)
-                } else {
-                    Modifier
-                },
-            )
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        content = content,
-    )
+            .border(1.dp, LoadcastColors.Divider),
+    ) {
+        if (topAccent != null) {
+            Box(Modifier.fillMaxWidth().height(4.dp).background(topAccent))
+        }
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            content = content,
+        )
+    }
 }
 
 @Composable

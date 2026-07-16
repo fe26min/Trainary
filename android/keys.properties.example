@@ -1,0 +1,18 @@
+# LOADCAST Android 키 템플릿.
+# 이 파일을 keys.properties 로 복사한 뒤 실제 값을 채우세요. keys.properties 는 .gitignore 대상입니다.
+#   cp keys.properties.example keys.properties
+#
+# 값이 없어도 빌드는 됩니다(빈 문자열 fallback) — 소셜 로그인만 동작하지 않습니다.
+
+# Supabase — anon key는 클라이언트 공개용(보안은 RLS가 담당). URL과 함께 여기 둡니다.
+SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+SUPABASE_ANON_KEY=
+
+# 소셜 로그인 (네이티브 앱 키 / OAuth 클라이언트 ID)
+KAKAO_NATIVE_APP_KEY=
+GOOGLE_WEB_CLIENT_ID=
+NAVER_CLIENT_ID=
+NAVER_CLIENT_SECRET=
+
+# ⚠️ 서버 전용 비밀(카카오 Client Secret, Supabase service_role 키)은 여기에 넣지 마세요.
+#    그것들은 Supabase 대시보드 / Edge Function secrets 에만 존재합니다. (docs/SECRETS.md 참고)

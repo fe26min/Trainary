@@ -24,9 +24,11 @@ DerivedData/
 # OS
 .DS_Store
 
-# Secrets
+# Secrets — 실제 키 파일은 커밋 금지 (*.example 템플릿만 커밋)
 *.keystore
 *.jks
 google-services.json
 GoogleService-Info.plist
 .env
+android/keys.properties
+ios/Secrets.xcconfig

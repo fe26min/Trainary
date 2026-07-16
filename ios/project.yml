@@ -10,6 +10,15 @@ packages:
   LoadcastCore:
     path: LoadcastCore
 
+configs:
+  Debug: debug
+  Release: release
+
+# 커밋되는 Config.xcconfig가 (있으면) Secrets.xcconfig를 include — 키 없이도 빌드 성공.
+configFiles:
+  Debug: Config.xcconfig
+  Release: Config.xcconfig
+
 targets:
   Loadcast:
     type: application
@@ -20,11 +29,9 @@ targets:
       - package: LoadcastCore
     settings:
       base:
+        # 직접 관리하는 Info.plist 사용(키 주입 위해). XcodeGen이 이 파일은 리소스에서 제외.
+        INFOPLIST_FILE: Loadcast/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.loadcast.app
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: LOADCAST
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         MARKETING_VERSION: 0.1.0
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: 5.9

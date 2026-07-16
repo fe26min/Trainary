@@ -1,0 +1,11 @@
+// LOADCAST iOS 빌드 설정 — 커밋됨.
+// 기본값은 비어 있고, 존재하면 Secrets.xcconfig(gitignore)가 값을 덮어씁니다.
+// "#include?" 의 물음표는 파일이 없어도 에러 없이 넘어가게 합니다(키 없이도 빌드 성공).
+
+SUPABASE_HOST =
+SUPABASE_ANON_KEY =
+KAKAO_NATIVE_APP_KEY =
+GOOGLE_REVERSED_CLIENT_ID =
+NAVER_CLIENT_ID =
+
+#include? "Secrets.xcconfig"
