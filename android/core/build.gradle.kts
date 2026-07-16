@@ -7,8 +7,9 @@ kotlin {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.11.0") // RecordCodec (로컬 저장 직렬화)
+
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.code.gson:gson:2.11.0")
 }
 
 tasks.test {

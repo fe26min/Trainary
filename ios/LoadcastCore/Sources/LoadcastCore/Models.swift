@@ -1,3 +1,5 @@
+import Foundation
+
 /// 운동 강도 3단계. 계수는 docs/SPEC.md §2 (Foster sRPE 축약).
 public enum Intensity: String, CaseIterable, Sendable {
     case low = "LOW"
@@ -63,7 +65,8 @@ public enum ReasonCode: String, CaseIterable, Sendable {
     case acwrLowRoom = "ACWR_LOW_ROOM"
 }
 
-public struct WorkoutRecord: Hashable, Sendable {
+public struct WorkoutRecord: Hashable, Sendable, Identifiable {
+    public let id: String
     public let date: DayDate
     public let type: WorkoutType
     public let durationMin: Int
@@ -77,10 +80,12 @@ public struct WorkoutRecord: Hashable, Sendable {
         type: WorkoutType,
         durationMin: Int,
         intensity: Intensity,
+        id: String = UUID().uuidString,
         customTypeLabel: String? = nil,
         satisfaction: Int? = nil,
         memo: String? = nil
     ) {
+        self.id = id
         self.date = date
         self.type = type
         self.durationMin = durationMin

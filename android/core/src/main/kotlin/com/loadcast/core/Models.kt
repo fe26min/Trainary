@@ -38,6 +38,7 @@ data class WorkoutRecord(
     val type: WorkoutType,
     val durationMin: Int,
     val intensity: Intensity,
+    val id: String = java.util.UUID.randomUUID().toString(),
     val customTypeLabel: String? = null,
     val satisfaction: Int? = null,
     val memo: String? = null,

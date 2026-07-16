@@ -1,4 +1,5 @@
 import SwiftUI
+import LoadcastCore
 
 /// 디자인 토큰 — 클로드 디자인 "운동 부하 분석 앱 설계" 컬러 섹션.
 /// 값은 이 파일에서만 정의하고 화면 코드에 하드코딩하지 않는다.
@@ -48,6 +49,48 @@ enum LoadcastColors {
     static let neutral700 = Color(hex: 0x5D5D60)
     static let neutral800 = Color(hex: 0x424244)
     static let neutral900 = Color(hex: 0x2B2B2D)
+}
+
+/// 준비도/강도/부하 상태 계열 색 묶음 — (본색, 100 틴트, 800 텍스트).
+struct StatusPalette {
+    let main: Color
+    let tint: Color
+    let onTint: Color
+}
+
+enum Palette {
+    static func of(_ state: RecommendationState) -> StatusPalette {
+        switch state {
+        case .highOk: StatusPalette(main: LoadcastColors.ok, tint: LoadcastColors.ok100, onTint: LoadcastColors.ok800)
+        case .moderate: StatusPalette(main: LoadcastColors.warn, tint: LoadcastColors.warn100, onTint: LoadcastColors.warn800)
+        case .recovery: StatusPalette(main: LoadcastColors.rest, tint: LoadcastColors.rest100, onTint: LoadcastColors.rest800)
+        }
+    }
+
+    static func of(_ intensity: Intensity) -> StatusPalette {
+        switch intensity {
+        case .low: StatusPalette(main: LoadcastColors.ok, tint: LoadcastColors.ok100, onTint: LoadcastColors.ok800)
+        case .moderate: StatusPalette(main: LoadcastColors.warn, tint: LoadcastColors.warn100, onTint: LoadcastColors.warn800)
+        case .high: StatusPalette(main: LoadcastColors.rest, tint: LoadcastColors.rest100, onTint: LoadcastColors.rest800)
+        }
+    }
+
+    static func of(_ status: LoadStatus) -> StatusPalette {
+        switch status {
+        case .low, .optimal: StatusPalette(main: LoadcastColors.ok, tint: LoadcastColors.ok100, onTint: LoadcastColors.ok800)
+        case .caution: StatusPalette(main: LoadcastColors.warn, tint: LoadcastColors.warn100, onTint: LoadcastColors.warn800)
+        case .overload: StatusPalette(main: LoadcastColors.rest, tint: LoadcastColors.rest100, onTint: LoadcastColors.rest800)
+        case .unknown: StatusPalette(main: LoadcastColors.neutral500, tint: LoadcastColors.neutral100, onTint: LoadcastColors.neutral700)
+        }
+    }
+
+    static func of(_ level: FatigueLevel) -> StatusPalette {
+        switch level {
+        case .low: of(Intensity.low)
+        case .moderate: of(Intensity.moderate)
+        case .high: of(Intensity.high)
+        }
+    }
 }
 
 extension Color {

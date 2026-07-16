@@ -38,6 +38,30 @@ public struct DayDate: Hashable, Comparable, Sendable {
         DayDate(daysSinceEpoch: daysSinceEpoch + days)
     }
 
+    /// (연, 월, 일) 분해 (Howard Hinnant의 civil_from_days 알고리즘).
+    public var components: (year: Int, month: Int, day: Int) {
+        let z = daysSinceEpoch + 719_468
+        let era = (z >= 0 ? z : z - 146_096) / 146_097
+        let doe = z - era * 146_097
+        let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365
+        let y = yoe + era * 400
+        let doy = doe - (365 * yoe + yoe / 4 - yoe / 100)
+        let mp = (5 * doy + 2) / 153
+        let day = doy - (153 * mp + 2) / 5 + 1
+        let month = mp < 10 ? mp + 3 : mp - 9
+        return (month <= 2 ? y + 1 : y, month, day)
+    }
+
+    /// "yyyy-MM-dd" 표현 (RecordCodec 및 UI 표기용).
+    public var isoString: String {
+        let (year, month, day) = components
+        func pad(_ n: Int, _ width: Int) -> String {
+            let s = String(n)
+            return s.count >= width ? s : String(repeating: "0", count: width - s.count) + s
+        }
+        return "\(pad(year, 4))-\(pad(month, 2))-\(pad(day, 2))"
+    }
+
     public static func < (lhs: DayDate, rhs: DayDate) -> Bool {
         lhs.daysSinceEpoch < rhs.daysSinceEpoch
     }
