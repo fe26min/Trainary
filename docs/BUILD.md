@@ -21,6 +21,10 @@ cd android
 ./gradlew :app:assembleDebug  # 또는 CLI 빌드 (Android SDK 필요)
 ```
 
+> ⚠️ 시스템에 설치된 `gradle`을 직접 쓰지 마세요(버전이 낮으면
+> "FoojayToolchainsPlugin needs Gradle 7.6+" 같은 에러). 반드시 프로젝트의 `./gradlew`를 사용합니다 —
+> 올바른 Gradle 8.14.3을 자동으로 내려받습니다. Android Studio로 열면 자동으로 래퍼를 씁니다.
+
 첫 빌드 시 Gradle이 AGP·Compose 의존성을 내려받습니다(네트워크 필요).
 
 ## iOS
